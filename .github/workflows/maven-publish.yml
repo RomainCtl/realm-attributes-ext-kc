@@ -34,11 +34,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
+      - name: version
+        run: echo "::set-output name=version::$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)"
+        id: version
+
       - name: Release to Github releases
         uses: softprops/action-gh-release@v1
         with:
-          files: "target/realm-attributes-ext-kc-${{ github.ref }}.jar"
+          files: "target/realm-attributes-ext-kc-${{ steps.version.outputs.version }}.jar"
           fail_on_unmatched_files: true
-          tag_name: v${{ github.ref }}
+          tag_name: v${{ steps.version.outputs.version }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
