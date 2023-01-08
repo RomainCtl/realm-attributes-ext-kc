@@ -8,6 +8,9 @@ on:
     tags:
       - '*'
 
+permissions:
+  contents: write
+
 jobs:
   build:
 
@@ -45,5 +48,4 @@ jobs:
           fail_on_unmatched_files: true
           tag_name: v${{ steps.version.outputs.version }}
         env:
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-#          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
