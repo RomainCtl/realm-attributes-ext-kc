@@ -8,15 +8,12 @@ on:
     tags:
       - '*'
 
-permissions:
-  contents: write
-
 jobs:
   build:
 
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: read|write
       packages: write
 
     steps:
@@ -46,6 +43,6 @@ jobs:
         with:
           files: "target/realm-attributes-ext-kc-${{ steps.version.outputs.version }}.jar"
           fail_on_unmatched_files: true
-          tag_name: v${{ steps.version.outputs.version }}
+        #          tag_name: v${{ steps.version.outputs.version }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
