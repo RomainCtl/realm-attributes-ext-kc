@@ -1,0 +1,30 @@
+version: "3.8"
+
+volumes:
+    postgres_data:
+        driver: local
+
+services:
+    keycloak:
+        build: .
+        container_name: keycloak
+        ports:
+            - 8080:8080
+            - 8443:8443
+        env_file:
+            - .env
+        command: [ "start", "--optimized" ]
+        depends_on:
+            - postgres
+    postgres:
+        image: postgres:15-alpine
+        container_name: postgres
+        restart: always
+        environment:
+            POSTGRES_DB: ${KC_DB_URL_DATABASE}
+            POSTGRES_USER: ${KC_DB_USERNAME}
+            POSTGRES_PASSWORD: ${KC_DB_PASSWORD}
+        ports:
+            - 5432:5432
+        volumes:
+            - postgres_data:/var/lib/postgresql/data

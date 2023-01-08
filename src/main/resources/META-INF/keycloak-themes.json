@@ -1,0 +1,8 @@
+{
+    "themes": [
+        {
+            "name": "realm-attributes",
+            "types": ["admin"]
+        }
+    ]
+}

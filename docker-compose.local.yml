@@ -1,0 +1,11 @@
+version: "3.8"
+
+# Used for development purpose, themes are not cached so that you can easily work on them without a need to restart
+services:
+    keycloak:
+        environment:
+            KEYCLOAK_ADMIN: admin
+            KEYCLOAK_ADMIN_PASSWORD: admin
+        volumes:
+            - ./src/main/resources/theme:/opt/keycloak/themes
+        command: [ "start-dev" ]
