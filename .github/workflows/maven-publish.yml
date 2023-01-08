@@ -37,8 +37,8 @@ jobs:
       - name: Release to Github releases
         uses: softprops/action-gh-release@v1
         with:
-          files: "target/realm-attributes-ext-kc-${{ github.event.inputs.releaseVersion }}.jar"
+          files: "target/realm-attributes-ext-kc-${{ github.ref }}.jar"
           fail_on_unmatched_files: true
-          tag_name: v${{ github.event.inputs.releaseVersion }}
+          tag_name: v${{ github.ref }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
