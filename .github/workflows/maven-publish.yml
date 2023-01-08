@@ -42,7 +42,7 @@ jobs:
         id: version
 
       - name: Release to Github releases
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v0.1.15
         with:
           files: "target/realm-attributes-ext-kc-${{ steps.version.outputs.version }}.jar"
           fail_on_unmatched_files: true
