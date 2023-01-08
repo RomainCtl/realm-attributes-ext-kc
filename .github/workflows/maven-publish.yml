@@ -35,7 +35,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: version
-        run: echo "::set-output name=version::$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)"
+        run: echo "version::$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_OUTPUT
         id: version
 
       - name: Release to Github releases
@@ -45,4 +45,5 @@ jobs:
           fail_on_unmatched_files: true
           tag_name: v${{ steps.version.outputs.version }}
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+#          GITHUB_TOKEN: ${{ github.token }}
