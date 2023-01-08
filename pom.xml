@@ -16,4 +16,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub RomainCtl Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/RomainCtl/realm-attributes-ext-kc</url>
+        </repository>
+    </distributionManagement>
+
 </project>
