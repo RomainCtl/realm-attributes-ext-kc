@@ -1,26 +1,39 @@
-# Build
-FROM quay.io/keycloak/keycloak:20.0.2 as builder
+ARG KEYCLOAK_VERSION=26.7.4
 
-# Enable health and metrics support
+# Build
+FROM quay.io/keycloak/keycloak:${KEYCLOAK_VERSION} AS builder
+
+ARG KEYCLOAK_VERSION
+
+# Health and metrics support
 ENV KC_HEALTH_ENABLED=true
 ENV KC_METRICS_ENABLED=true
 
-# Configure a database vendor
+# Database vendor (overridable at runtime via KC_DB_*)
 ENV KC_DB=postgres
+
+# Enable the declarative-ui feature (experimental) so the
+# UiTabProvider SPI is wired into ServerInfo and rendered
+# by the keycloak.v2 admin console.
+ENV KC_FEATURES=declarative-ui
 
 WORKDIR /opt/keycloak
 
-# for demonstration purposes only, please make sure to use proper certificates in production instead
-RUN keytool -genkeypair -storepass password -storetype PKCS12 -keyalg RSA -keysize 2048 -dname "CN=server" -alias server -ext "SAN:c=DNS:localhost,IP:127.0.0.1" -keystore conf/server.keystore
+# Demonstration only - replace with proper certificates in production.
+RUN keytool -genkeypair -storepass password -storetype PKCS12 -keyalg RSA \
+        -keysize 2048 -dname "CN=server" -alias server \
+        -ext "SAN:c=DNS:localhost,IP:127.0.0.1" \
+        -keystore conf/server.keystore
 
-# A example build step that downloads a JAR file from a URL and adds it to the providers directory (work also for themes)
-#RUN curl -sL <MY_PROVIDER_JAR_URL> -o /opt/keycloak/providers/myprovider.jar
+# Drop the provider JAR(s) built by `mvn package` into /opt/keycloak/providers.
 COPY target/*.jar /opt/keycloak/providers/
 
+# Build the optimized Keycloak image with declarative-ui enabled.
 RUN /opt/keycloak/bin/kc.sh build
 
 # Create optimized image
-FROM quay.io/keycloak/keycloak:20.0.2
+FROM quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}
+
 COPY --from=builder /opt/keycloak/ /opt/keycloak/
 
 ENTRYPOINT ["/opt/keycloak/bin/kc.sh"]

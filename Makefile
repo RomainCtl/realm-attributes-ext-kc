@@ -3,9 +3,6 @@
 # ========================================================
 default: help	# default target
 
-# Sample keycloak
-# docker run -p 8080:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:20.0.2 start-dev
-
 # --------------------------------------------------------
 # Include master project makefile
 # --------------------------------------------------------
@@ -61,10 +58,10 @@ rm: stop ## Destroy the container
 ##@ Internal services starting tasks
 # --------------------------------------------------------
 
-dev: ## Start 'keycloak' service in dev mode (themes are not cached so that you can easily work on them without a need to restart)
+dev: ## Start 'keycloak' service in dev mode (mounts providers from ./target so a `mvn package` is enough to reload)
 	${CMD_DOCKER_COMPOSE_LOCAL} up -d ${KEYCLOAK_SERVICE_NAME}
 
-kc: kc-rm ## (Re)start 'keycloak' service only (also available: 'kc-[build|logs|sh|stop|rm])
+kc: kc-rm ## (Re)start 'keycloak' service only (also available: 'kc-[build|logs|sh|stop|rm]')
 	${CMD_DOCKER_COMPOSE} up -d ${KEYCLOAK_SERVICE_NAME}
 kc-build:; ${CMD_DOCKER_COMPOSE} build $(KEYCLOAK_SERVICE_NAME)
 kc-logs:; ${CMD_DOCKER_COMPOSE} logs -f $(KEYCLOAK_SERVICE_NAME)
@@ -73,7 +70,7 @@ kc-stop:; ${CMD_DOCKER_COMPOSE} stop $(KEYCLOAK_SERVICE_NAME)
 kc-rm: kc-stop; ${CMD_DOCKER_COMPOSE} rm -f $(KEYCLOAK_SERVICE_NAME)
 
 
-db: db-rm ## (Re)start 'postgres' service only (also available: 'db-[build|logs|sh|stop|rm])
+db: db-rm ## (Re)start 'postgres' service only (also available: 'db-[build|logs|sh|stop|rm]')
 	${CMD_DOCKER_COMPOSE} up -d ${POSTGRES_SERVICE_NAME}
 db-build:; ${CMD_DOCKER_COMPOSE} build $(POSTGRES_SERVICE_NAME)
 db-logs:; ${CMD_DOCKER_COMPOSE} logs -f $(POSTGRES_SERVICE_NAME)
