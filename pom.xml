@@ -6,15 +6,63 @@
 
     <groupId>fr.romainctl</groupId>
     <artifactId>realm-attributes-ext-kc</artifactId>
-    <name>Keycloak theme - Realm attributes interface</name>
-    <version>1.0</version>
+    <name>Keycloak extension - Realm attributes UI tab (declarative UI SPI)</name>
+    <description>
+        Adds an "Attributes" tab to the Realm settings page of the keycloak.v2 admin console,
+        backed by the org.keycloak.services.ui.extend.UiTabProvider SPI (declarative-ui feature).
+        Data is mirrored to the realm's standard REALM.ATTRIBUTE column through
+        ComponentFactory#onCreate / #onUpdate / #preRemove.
+    </description>
+    <version>2.0</version>
     <packaging>jar</packaging>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.release>17</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <keycloak.version>26.7.4</keycloak.version>
+        <jackson.version>2.18.2</jackson.version>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-server-spi</artifactId>
+            <version>${keycloak.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-server-spi-private</artifactId>
+            <version>${keycloak.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Required for org.keycloak.Config.Scope (used by ProviderFactory.init). -->
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-core</artifactId>
+            <version>${keycloak.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.logging</groupId>
+            <artifactId>jboss-logging</artifactId>
+            <version>3.6.2.Final</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Test scope -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.11.0</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <distributionManagement>
         <repository>
